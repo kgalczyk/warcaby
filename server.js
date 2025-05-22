@@ -1,7 +1,7 @@
 var express = require("express");
 const PORT = 3000;
 var app = express();
-app.use(express.static('Checkers/static'));
+app.use(express.static('Checkers/static/'));
 app.use(express.json());
 
 
