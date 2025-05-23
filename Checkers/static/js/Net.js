@@ -67,7 +67,7 @@ class Net {
                 clearInterval(gameManager.interval);
                 gameManager.ui.removeLoginPage();
             }
-        }, 500);
+        }, 200);
     }
 
     sendNewPosition = async (oldPosition, newPosition, piecePosition, fieldPosition) => {
