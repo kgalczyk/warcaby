@@ -32,6 +32,8 @@ app.post("/position", function (req, res) {
     positionManager.previousIndexes = json.old;
     positionManager.currentIndexes = json.new;
     positionManager.whoseTurn = !positionManager.whoseTurn;
+    positionManager.turnCount++;
+
     // odesłanie json-a z nowymi indexami, nową pozycją bierki
     res.end(JSON.stringify(json));
 })
@@ -40,6 +42,7 @@ app.post("/change", (req, res) => {
     let request = req.body;
 
     let data = {
+        turnCount: positionManager.turnCount,
         status: playerManager.status,
         winner: playerManager.winner,
         old: positionManager.previousIndexes,
@@ -52,7 +55,7 @@ app.post("/change", (req, res) => {
         takenPiecePosition: positionManager.positionOfTakenPiece
     };
 
-    console.log(data);
+    // console.log(data);
     res.end(JSON.stringify(data));
     if (positionManager.taken) {
         if (positionManager.whoTakes != request.who)
@@ -117,6 +120,7 @@ let playerManager = {
 
 // Obiekt do zarządzania pozycją na planszy i przebiegiem gry
 let positionManager = {
+    turnCount: 0,
     whoTakes: null,
     taken: false,
     indexesOfTakenPiece: 0,

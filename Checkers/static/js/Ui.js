@@ -97,7 +97,7 @@ class Ui {
         gameManager.raycaster = new Raycaster(gameManager.game.piecesObjects, gameManager.game.fieldsObjects, this.pieceColor);
 
         // Rozpoczęcie wysyłania zapytania o nową pozycję
-        this.interval = setInterval(() => { gameManager.net.waitForChange() }, 1000);
+        this.interval = setInterval(() => { gameManager.net.waitForChange() }, 500);
     }
 
     displayOpponentTurnScreen = () => {
@@ -134,7 +134,7 @@ class Ui {
     lose = () => {
         let opponentMoveScreen = document.createElement("div");
         opponentMoveScreen.id = "opponentTurn";
-        opponentMoveScreen.classList.add("counter");
+        opponentMoveScreen.classList.add("counter-red");
         document.getElementById("scene").append(opponentMoveScreen);
         document.getElementById("opponentTurn").innerHTML = "przegrana";
     }

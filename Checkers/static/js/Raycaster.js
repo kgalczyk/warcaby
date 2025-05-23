@@ -125,7 +125,7 @@ class Raycaster {
 
         let takeFields = this.checkForTakeMoves(fields);
         fields = this.checkForPiecesInNormalMove(fields);
-        console.log("możliwe pola ruchu:", fields);
+        // console.log("możliwe pola ruchu:", fields);
 
         fields.forEach((field) => {
             field.isPossibleToMove = true;
@@ -143,13 +143,26 @@ class Raycaster {
     }
 
     checkForNormalMoves = (piecePosition) => {
-        return this.fields.filter((field) => {
-            if (field.position.x + 20 === piecePosition.x || field.position.x - 20 === piecePosition.x)
-                if (this.piece.pieceColor === 1) {
-                    if (field.position.z - 20 === piecePosition.z) return field;
-                } else
-                    if (field.position.z + 20 === piecePosition.z) return field;
-        })
+        let directions = [];
+
+        if (this.piece.pieceColor === 2) {
+            // czarny
+            directions = [{ x: -20, z: -20 }, { x: 20, z: -20 }];
+        } else {
+            // biały
+            directions = [{ x: -20, z: 20 }, { x: 20, z: 20 }];
+        }
+
+        return directions
+            .map(dir => this.findFieldByPosition({ x: piecePosition.x + dir.x, z: piecePosition.z + dir.z }))
+            .filter(field => field !== undefined);
+        // return this.fields.filter((field) => {
+        //     if (field.position.x + 20 === piecePosition.x || field.position.x - 20 === piecePosition.x)
+        //         if (this.piece.pieceColor === 1) {
+        //             if (field.position.z - 20 === piecePosition.z) return field;
+        //         } else
+        //             if (field.position.z + 20 === piecePosition.z) return field;
+        // })
     }
 
     checkForTakeMoves = (fields) => {
@@ -183,7 +196,7 @@ class Raycaster {
     // ale co tam
     findPieceByPosition = (x, z) => {
         return this.pieces.find((piece) => {
-            if (x === piece.position.x && z === piece.position.z) return piece;
+            if (x == piece.position.x && z == piece.position.z) return piece;
         })
     }
 
@@ -209,7 +222,7 @@ class Raycaster {
     }
 
     removeTakenPieces = () => {
-        console.log("ostatnio zbity pionek:", this.pieceToTake);
+        // console.log("ostatnio zbity pionek:", this.pieceToTake);
         if (this.pieceToTake && this.pieceToTake.isTaken) {
             gameManager.game.removePieceObject(this.pieceToTake);
             if (this.fieldsToTake) gameManager.net.takePieceChange(this.fieldsToTake[0].indexes, this.pieceToTake.position);

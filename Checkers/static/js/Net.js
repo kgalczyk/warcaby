@@ -67,7 +67,7 @@ class Net {
                 clearInterval(gameManager.interval);
                 gameManager.ui.removeLoginPage();
             }
-        }, 200);
+        }, 500);
     }
 
     sendNewPosition = async (oldPosition, newPosition, piecePosition, fieldPosition) => {
@@ -101,6 +101,8 @@ class Net {
         let json = await this.fetchAsync(options, "/change");
 
         this.executeChanges(json);
+        // console.log("game.pieces", gameManager.game.piecesObjects);
+        // console.log("raycaster.pieces", gameManager.raycaster.pieces);
     }
 
     executeChanges = (json) => {
@@ -120,6 +122,8 @@ class Net {
     }
 
     executeMove = (json) => {
+        // console.log("dane o grze:", json);
+
         if (json.target !== 0) {
             this.executeTakeMove(json);
             this.executeNormalMove(json);
@@ -128,16 +132,17 @@ class Net {
 
     executeTakeMove = (json) => {
         if (json.taken) {
-            let pieceToRemove = gameManager.game.findPieceByPosition(json.takenPiecePosition.x, json.takenPiecePosition.z);
+            let pieceToRemove = gameManager.game.findPieceByPosition(json.takenPiecePosition.x, json.takenPiecePosition.z); // zwraca undefined
 
+            // usuwanie pionka z raycastera ??
             gameManager.raycaster.pieces = gameManager.raycaster.pieces.filter((piece) => {
                 if (piece.position.x != pieceToRemove.position.x || piece.position.z != pieceToRemove.position.z) return piece;
             });
 
-            console.log("tablica pionków:", gameManager.raycaster.pieces);
-            console.log("czy zbito pionka:", json.taken);
-            console.log("dane o ruchu:", json);
-            console.log("bierka zbita: ", pieceToRemove); /// nie widzi tego, pytanie, dlaczego
+            // console.log("tablica pionków:", gameManager.raycaster.pieces);
+            // console.log("czy zbito pionka:", json.taken);
+            // console.log("dane o ruchu:", json);
+            // console.log("bierka zbita: ", pieceToRemove); // nie widzi tego, pytanie, dlaczego
 
             gameManager.game.removePieceFromArray(json.indexesOfTakenPiece);
             gameManager.game.removePieceObject(pieceToRemove);
