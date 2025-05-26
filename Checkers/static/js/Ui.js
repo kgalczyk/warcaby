@@ -3,6 +3,7 @@ class Ui {
     pieceColor;
     opponentMoveIntervalWorking = false;
     infoShowed = false;
+    maxTurnTime = 10;
 
     constructor() {
         console.log("stworzono obiekt UI");
@@ -104,7 +105,7 @@ class Ui {
         if (this.opponentMoveIntervalWorking) return;
 
         let opponentMoveScreen = document.createElement("div");
-        opponentMoveScreen.innerHTML = 30;
+        opponentMoveScreen.innerHTML = this.maxTurnTime;
         opponentMoveScreen.id = "opponentTurn";
         opponentMoveScreen.classList.add("counter");
         document.getElementById("scene").append(opponentMoveScreen);

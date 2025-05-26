@@ -82,6 +82,8 @@ app.post("/win", (req, res) => {
     let data = req.body;
     playerManager.status = data.status;
     playerManager.winner = data.winner;
+    console.log(`wygrał gracz:${data.winner == true ? playerManager.users[0].login : playerManager.users[1].login} grający ${data.winner == true ? "białymi" : "czarnymi"}`);
+    setTimeout(playerManager.resetUsers, 1000);
     res.end(JSON.stringify(data));
 })
 
@@ -90,6 +92,7 @@ let playerManager = {
     winner: null,
     status: -1,
     users: [],
+    isReset: true,
 
     checkUserValidity: function (newUser) {
         if (newUser.login === "") return { status: "INVALID_NICKNAME" };
@@ -99,6 +102,9 @@ let playerManager = {
         this.users.push(newUser);
         console.log("obecni użytkownicy:", playerManager.users);
         console.log("ilu:", playerManager.users.length);
+
+        this.isReset = false;
+
         return {
             status: "PLAYER_ADDED",
             player: newUser.login,
@@ -115,6 +121,18 @@ let playerManager = {
     setPlayerPieceColor: () => {
         if (playerManager.users.length === 1) return true;
         return false;
+    },
+
+    resetUsers: () => {
+        // console.log(playerManager);
+
+        if (playerManager.winner != null) {
+            console.log("zresetowano listę graczy");
+            playerManager.users = [];
+            playerManager.status = -1;
+            playerManager.winner = null;
+            playerManager.isReset = true;
+        }
     }
 }
 
